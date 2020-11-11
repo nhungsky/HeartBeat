@@ -18,13 +18,17 @@ class HeartMeansureActivity : AppCompatActivity() {
         setContentView(R.layout.activity_heart_meansure)
 
         snake.setMinValue(0F)
-        snake.setMaxValue(160F)
+        snake.setMaxValue(200F)
+
+        // Bắt tín hiệu bluetooth
+        BluetoothClient(this).start()
     }
 
     fun updateBPM(s: Float) {
         ahmTvHearthBeat.post {
             ahmTvHearthBeat.text = s.toString()
-            snake.addValue(s.toFloat())
+            if (s <= 200)
+            snake.addValue(s)
         }
     }
 

@@ -6,11 +6,9 @@ import kotlin.math.round
 class BluetoothClient(val context: HeartMeansureActivity) : Thread() {
     val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb")
     private val socket =
-        HeartMeansureActivity.selectedDevice?.createRfcommSocketToServiceRecord(uuid)
+        HeartMeansureActivity.selectedDevice!!.createRfcommSocketToServiceRecord(uuid)
 
     override fun run() {
-        if (this.socket == null)
-            return
         this.socket.connect()
 
         val inputStream = this.socket.inputStream
@@ -27,6 +25,8 @@ class BluetoothClient(val context: HeartMeansureActivity) : Thread() {
             if (text.indexOf('\r') > 0 || text.indexOf('\n') > 0) {
                 text = text.replace("\r", "")
                     .replace("\n", "")
+
+                println("Nhận được: $text")
 
                 if (text.matches(Regex("B\\d+_Q\\d+"))) {
                     for (r in text.split("_")) {
