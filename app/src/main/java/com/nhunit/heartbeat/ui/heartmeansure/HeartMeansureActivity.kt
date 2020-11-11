@@ -24,11 +24,18 @@ class HeartMeansureActivity : AppCompatActivity() {
         BluetoothClient(this).start()
     }
 
+    var previousUpdate = 0L
+
     fun updateBPM(s: Float) {
         ahmTvHearthBeat.post {
+            if (System.currentTimeMillis() - previousUpdate < 1000)
+                return@post
+
+            previousUpdate = System.currentTimeMillis()
+
             ahmTvHearthBeat.text = s.toString()
             if (s <= 200)
-            snake.addValue(s)
+                snake.addValue(s)
         }
     }
 
